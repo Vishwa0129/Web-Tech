@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="movieRentalApp">
+<head>
+    <title>Movie Rental Store</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="App1.js"></script> 
+</head>
+<body ng-controller="MovieController">
+    <h2>Movie Rental Store</h2>
+    <div>
+        <label for="genreFilter">Genre:</label>
+        <select id="genreFilter" ng-model="genreFilter">
+            <option value="">All</option>
+            <option ng-repeat="genre in genres">{{ genre }}</option>var app = angular.module('movieRentalApp', []);
+
+app.service('RentalService', function() {
+    this.calculateRentalPrice = function(year) {
+        var currentYear = new Date().getFullYear();
+        return (currentYear - year) < 3 ? 5 : 3; 
+    };
+});
+
+app.controller('MovieController', function($scope, RentalService) {
+    $scope.movies = [
+        { title: 'Inception', genre: 'Sci-Fi', year: 2010 },
+        { title: 'Parasite', genre: 'Drama', year: 2019 },
+        { title: 'The Dark Knight', genre: 'Action', year: 2008 },
+        { title: 'Avengers: Endgame', genre: 'Action', year: 2019 },
+        { title: 'Interstellar', genre: 'Sci-Fi', year: 2014 }
+    ];
+
+    $scope.genres = _.uniq($scope.movies.map(movie => movie.genre)); 
+
+    $scope.$watch('movies', function() {
+        angular.forEach($scope.movies, function(movie) {
+            movie.rentalPrice = RentalService.calculateRentalPrice(movie.year);
+        });
+    }, true); 
+});
+        </select>
+    </div>
+    <div>
+        <label for="yearFilter">Year:</label>
+        <input type="number" id="yearFilter" ng-model="yearFilter">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Year</th>
+                <th>Rental Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="movie in movies | filter: { genre: genreFilter } | filter: { year: yearFilter }">
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.genre }}</td>
+                <td>{{ movie.year }}</td>
+                <td>{{ movie.rentalPrice | currency }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

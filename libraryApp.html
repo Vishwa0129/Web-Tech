@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="libraryApp">
+<head>
+    <title>Library App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="app.js"></script> 
+</head>
+<body ng-controller="LibraryController">
+    <h2>Library Categories</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Book Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="category in library">
+                <td>{{ category.category }}</td>
+                <td><input type="number" ng-model="category.count"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <h3>Add New Category</h3>
+    <input type="text" ng-model="newCategory.name" placeholder="New Category">
+    <button ng-click="addCategory()">Add</button>
+</body>
+</html>
